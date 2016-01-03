@@ -1,10 +1,12 @@
 {
   "name": "service-registry",
+  "description": "A service registry for node with dependency resolution, injection and lazy service initialization",
   "version": "0.0.1",
   "main": "lib/index.js",
   "dependencies": {
     "babel-runtime": "^5.8.20",
     "bluebird": "^2.9.34",
+    "dependency-resolver": "^2.0.1",
     "lodash": "^3.10.1"
   },
   "devDependencies": {
