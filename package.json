@@ -1,6 +1,6 @@
 {
-  "name": "service-registry",
-  "description": "A service registry for node with dependency resolution, injection and lazy service initialization",
+  "name": "component-registry",
+  "description": "A component registry for node with dependency resolution, injection and lazy component initialization",
   "version": "0.0.1",
   "main": "lib/index.js",
   "dependencies": {
