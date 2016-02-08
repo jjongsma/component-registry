@@ -236,7 +236,7 @@ describe('ComponentRegistry', function() {
       registry.componentResolver.add('two');
       registry.componentResolver.setDependency('two', 'one');
 
-      expect(() => registry.component('one')).to.throw('Circular reference detected');
+      expect(registry.component('one')).to.be.rejectedWith('Circular reference detected');
       registry.provider.restore();
 
     });

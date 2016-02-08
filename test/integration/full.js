@@ -118,6 +118,18 @@ describe('Component container integration', () => {
 
   });
 
+  describe('Circular dependencies', () => {
+  
+    it('explicit', () => {
+      expect(registry.require('circular-one')).to.be.rejectedWith('Circular reference detected');
+    });
+
+    it('runtime', () => {
+      expect(registry.require('circular-runtime-one')).to.be.rejectedWith('Circular reference detected');
+    });
+
+  });
+
   describe('Exclusive locks', () => {
 
     it('prevent duplicate component creation', () => {
