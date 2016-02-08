@@ -1,18 +1,17 @@
 'use strict';
 
-var ContainerRegistry = require('../../lib/registry');
-var ContainerRegistration = require('../../lib/registration');
+var ComponentRegistry = require('../../lib/registry');
+var ComponentRegistration = require('../../lib/registration');
 
-describe('Container Registry', function() {
+describe('ComponentRegistry', function() {
 
   var path = __dirname + '/components';
   var config = { field: 'value' };
 
-  var container;
   var registry;
 
   beforeEach(function() {
-    registry = new ContainerRegistry(path, config);
+    registry = new ComponentRegistry(path, config);
   });
 
   afterEach(function() {
@@ -21,22 +20,60 @@ describe('Container Registry', function() {
   describe('constructor', function() {
 
     it('no paths', () => {
-      expect(() => new ContainerRegistry()).to.throw(Error);
+      expect(() => new ComponentRegistry()).to.throw(Error);
     });
 
     it('single path', () => {
-      registry = new ContainerRegistry('one');
+      registry = new ComponentRegistry('one');
       expect(registry.searchPaths).to.deep.equal(['one']);
     });
 
     it('multiple paths', () => {
-      registry = new ContainerRegistry(['one', 'two']);
+      registry = new ComponentRegistry(['one', 'two']);
       expect(registry.searchPaths).to.deep.equal(['one','two']);
     });
 
     it('default members', () => {
       assert(registry.config);
       assert(registry.providers);
+    });
+
+  });
+
+  describe('require()', function() {
+
+    beforeEach(function() {
+      sinon.stub(registry, 'component').returns(Promise.resolve('component'));
+    });
+
+    afterEach(function() {
+      registry.component.restore();
+    });
+
+    it('no component', function() {
+      return expect(registry.require()).to.eventually.be.rejectedWith(Error);
+    });
+
+    it('single component', function() {
+      return registry.require('single').then(function(component) {
+        expect(registry.component).to.have.callCount(1);
+        expect(registry.component.args[0][0]).to.equal('single');
+        expect(component).to.equal('component');
+      });;
+    });
+
+    it('multiple components', function() {
+      return registry.require(['one','two','three']).then((components) => {
+        expect(registry.component).to.have.callCount(3);
+        expect(registry.component.args[0][0]).to.equal('one');
+        expect(registry.component.args[1][0]).to.equal('two');
+        expect(registry.component.args[2][0]).to.equal('three');
+        expect(components).to.deep.equal({
+          'one': 'component',
+          'two': 'component',
+          'three': 'component'
+        });
+      });
     });
 
   });
@@ -59,7 +96,7 @@ describe('Container Registry', function() {
     var mockRegistration;
 
     var module = function(registration, config) {
-      assert(registration instanceof ContainerRegistration);
+      assert(registration instanceof ComponentRegistration);
       expect(config).to.equal(registry.config);
       // Fake registry callback to prevent provider() from exploding
       registry.providers['one'] = {};

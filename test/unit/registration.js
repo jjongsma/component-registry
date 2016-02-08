@@ -1,9 +1,9 @@
 'use strict';
 
-var ContainerRegistry = require('../../lib/registry');
-var ContainerRegistration = require('../../lib/registration');
+var ComponentRegistry = require('../../lib/registry');
+var ComponentRegistration = require('../../lib/registration');
 
-describe('ContainerRegistration', function() {
+describe('ComponentRegistration', function() {
 
   var path = 'test';
 
@@ -12,8 +12,8 @@ describe('ContainerRegistration', function() {
   var builder;
 
   beforeEach(function() {
-    registryStub = sinon.createStubInstance(ContainerRegistry);
-    registration = new ContainerRegistration(registryStub, path);
+    registryStub = sinon.createStubInstance(ComponentRegistry);
+    registration = new ComponentRegistration(registryStub, path);
     builder = sinon.stub().returns({});
   });
 
