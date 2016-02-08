@@ -15,6 +15,8 @@ var config;
 const paths = {
   scripts: ['lib/**/*.js'],
   tests: [ 'test/**/*.js', ],
+  unitTests: [ 'test/unit/**/*.js', ],
+  integrationTests: [ 'test/integration/**/*.js', ],
   dist: 'dist'
 };
 
@@ -61,13 +63,13 @@ gulp.task('test', cb => {
   return runSequence(
       //'env:all',
       //'env:test',
-      'mocha:unit',
+      'mocha',
       //'mocha:coverage',
       cb);
 });
 
-gulp.task('mocha:unit', () => {
-  return gulp.src(paths.tests)
+function test(files) {
+  return gulp.src(files)
     .pipe(plugins.mocha({
       reporter: 'spec',
       require: [ './test/mocha.conf' ]
@@ -75,6 +77,18 @@ gulp.task('mocha:unit', () => {
     .once('end', function() {
       process.exit();
     });
+}
+
+gulp.task('mocha', () => {
+  return test(paths.tests);
+});
+
+gulp.task('mocha:unit', () => {
+  return test(paths.unitTests);
+});
+
+gulp.task('mocha:integration', () => {
+  return test(paths.integrationTests);
 });
 
 gulp.task('watch', () => {

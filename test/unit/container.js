@@ -27,7 +27,7 @@ describe('Container', function() {
     });
 
     it('single component', function() {
-      registryMock.expects('get').once().withArgs('single').returns(Promise.resolve('component'));
+      registryMock.expects('component').once().withArgs('single').returns(Promise.resolve('component'));
       var result = container.require('single');
       return Promise.all([
         expect(result).to.eventually.be.fulfilled,
@@ -36,9 +36,9 @@ describe('Container', function() {
     });
 
     it('multiple components', function() {
-      registryMock.expects('get').once().withArgs('one').returns(Promise.resolve('component'));
-      registryMock.expects('get').once().withArgs('two').returns(Promise.resolve('component'));
-      registryMock.expects('get').once().withArgs('three').returns(Promise.resolve('component'));
+      registryMock.expects('component').once().withArgs('one').returns(Promise.resolve('component'));
+      registryMock.expects('component').once().withArgs('two').returns(Promise.resolve('component'));
+      registryMock.expects('component').once().withArgs('three').returns(Promise.resolve('component'));
       return expect(container.require(['one','two','three'])).to.eventually.deep.equal({
         'one': 'component',
         'two': 'component',

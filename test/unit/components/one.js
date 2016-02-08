@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = exports = function(container, config) {
+export default function(container, config) {
   container.component(function() {
   });
-};
+}

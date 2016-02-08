@@ -32,6 +32,7 @@
     "istanbul": "~0.4.1",
     "jshint-stylish": "~2.1.0",
     "lazypipe": "^0.2.4",
+    "lodash": "^4.3.0",
     "mocha": "^2.2.5",
     "proxyquire": "^1.0.1",
     "requirejs": "~2.1.11",

@@ -150,7 +150,7 @@ describe('Container Registry', function() {
 
   });
 
-  describe('get()', function() {
+  describe('component()', function() {
 
     it('not registered', () => {
       expect(() => registry.component('missing')).to.throw(Error);
@@ -161,7 +161,7 @@ describe('Container Registry', function() {
       sinon.stub(registry, 'provider').returns({
         $get: builder
       });
-      return registry.get('one').then((component) => {
+      return registry.component('one').then((component) => {
         expect(registry.provider).to.have.callCount(1);
         expect(builder).to.have.callCount(1);
         expect(component).to.equal('component');
@@ -177,8 +177,8 @@ describe('Container Registry', function() {
         .returns({ $get: ['two', builder ] })
         .withArgs('two').throws(new Error('missing'));
 
-      return registry.get('one').then((component) => {
-        assert.fail('get() should fail');
+      return registry.component('one').then((component) => {
+        assert.fail('component() should fail');
       }).catch((err) => {
         assert(err);
         expect(registry.provider).to.have.callCount(2);
@@ -199,7 +199,7 @@ describe('Container Registry', function() {
       registry.componentResolver.add('two');
       registry.componentResolver.setDependency('two', 'one');
 
-      expect(() => registry.get('one')).to.throw('Circular reference detected');
+      expect(() => registry.component('one')).to.throw('Circular reference detected');
       registry.provider.restore();
 
     });
@@ -216,7 +216,7 @@ describe('Container Registry', function() {
         sinon.stub(registry, 'provider')
           .withArgs('one').returns({ $get: ['two', one ] })
           .withArgs('two').returns({ $get: [ two ] });
-        result = registry.get('one');
+        result = registry.component('one');
       });
 
       afterEach(() => {

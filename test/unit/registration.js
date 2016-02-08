@@ -122,6 +122,36 @@ describe('ContainerRegistration', function() {
       });
     });
 
+    it('block concurrent creation', function() {
+
+      var callCt = 0;
+
+      // Return async builder with delay
+      builder = function() {
+        callCt++;
+        return new Promise(function(resolve, reject) {
+          // Builder takes 200 ms to complete
+          setTimeout(() => resolve({ name: 'built:' + Date.now() }), 100);
+        });
+      };
+
+      registration.component(builder);
+      var provider = registryStub.register.args[0][1][0]();
+
+      return Promise.all([
+        provider.$get[0](),
+        // Delay second component request 50 ms, after first starts but not finished
+        new Promise(function(resolve, reject) {
+          setTimeout(() => resolve(provider.$get[0]()), 50);
+        })
+      ]).then(function(components) {
+        expect(callCt).to.equal(1);
+        expect(components).to.have.length(2);
+        expect(components[0]).to.equal(components[1]);
+      });
+
+    });
+
     it('missing builder', function() {
       expect(function() {
         registration.component(['one', 'two']);
