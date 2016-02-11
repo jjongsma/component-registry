@@ -56,7 +56,7 @@ gulp.task('lint', () => {
 gulp.task('transpile', () => {
     return gulp.src(paths.scripts)
         .pipe(transpile())
-        .pipe(gulp.dest(paths.dist));
+        .pipe(gulp.dest(paths.dist + '/lib'));
 });
 
 gulp.task('test', cb => {
