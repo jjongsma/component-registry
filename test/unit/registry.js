@@ -20,7 +20,8 @@ describe('ComponentRegistry', function() {
   describe('constructor', function() {
 
     it('no paths', () => {
-      expect(() => new ComponentRegistry()).to.throw(Error);
+      registry = new ComponentRegistry();
+      expect(registry.searchPaths).to.deep.equal([]);
     });
 
     it('single path', () => {
