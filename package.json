@@ -27,6 +27,7 @@
     "lazypipe": "^0.2.4",
     "lodash": "^4.3.0",
     "mocha": "^2.2.5",
+    "mockery": "^1.4.0",
     "run-sequence": "^1.1.0",
     "sinon": "^1.16.1",
     "sinon-chai": "^2.8.0",

@@ -1,5 +1,7 @@
 'use strict';
 
+var mockery = require('mockery');
+
 var ComponentRegistry = require('../../lib/registry');
 var ComponentRegistration = require('../../lib/registration');
 
@@ -82,8 +84,75 @@ describe('ComponentRegistry', function() {
   describe('load()', function() {
 
     it('load existing', () => {
-      var module = registry.load('one');
+      var module = registry.load('component');
       expect(module).to.be.a('function');
+    });
+
+    it('load missing', () => {
+      expect(() => registry.load('missing')).to.throw(Error);
+    });
+
+  });
+
+  describe('module()', function() {
+
+    before(function() {
+      mockery.registerMock('external', require('./external'));
+      mockery.registerMock('external/sub', require('./external/sub'));
+      mockery.registerAllowable(__dirname + '/components/external');
+      mockery.registerAllowable(__dirname + '/components/external/sub');
+    });
+
+    afterEach(function() {
+      mockery.disable();
+    });
+
+    it('load from search path', () => {
+      var module = registry.load('component');
+      expect(module).to.be.a('function');
+      expect(module()).to.equal('component');
+    });
+
+    it('load from search path + property', () => {
+      var module = registry.load('component:prop');
+      expect(module).to.be.a('function');
+      expect(module()).to.equal('component.prop');
+    });
+
+    it('load from search path submodule + property', () => {
+      var module = registry.load('component/sub:prop');
+      expect(module).to.be.a('function');
+      expect(module()).to.equal('component/sub.prop');
+    });
+
+    it('load from search path submodule + deep property', () => {
+      var module = registry.load('component/sub:prop.deep');
+      expect(module).to.be.a('function');
+      expect(module()).to.equal('component/sub.prop.deep');
+    });
+
+    it('load external', () => {
+      mockery.enable();
+      var module = registry.load('external');
+      mockery.disable();
+      expect(module).to.be.a('function');
+      expect(module()).to.equal('external');
+    });
+
+    it('load external + property', () => {
+      mockery.enable();
+      var module = registry.load('external:prop');
+      mockery.disable();
+      expect(module).to.be.a('function');
+      expect(module()).to.equal('external.prop');
+    });
+
+    it('load external submodule + property', () => {
+      mockery.enable();
+      var module = registry.load('external/sub:prop');
+      mockery.disable();
+      expect(module).to.be.a('function');
+      expect(module()).to.equal('external/sub.prop');
     });
 
     it('load missing', () => {
@@ -100,12 +169,12 @@ describe('ComponentRegistry', function() {
       assert(registration instanceof ComponentRegistration);
       expect(config).to.equal(registry.config);
       // Fake registry callback to prevent provider() from exploding
-      registry.providers['one'] = {};
+      registry.providers['component'] = {};
     }
 
     it('create existing', () => {
       sinon.stub(registry, 'load').returns(module);
-      registry.provider('one');
+      registry.provider('component');
       expect(registry.load).to.have.callCount(1);
       registry.load.restore();
     });
