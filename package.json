@@ -1,5 +1,5 @@
 {
-  "name": "component-registry",
+  "name": "foodjunky-component-registry",
   "description": "A component registry for node with dependency resolution, injection and lazy component initialization",
   "version": "0.0.1",
   "main": "lib/index.js",
