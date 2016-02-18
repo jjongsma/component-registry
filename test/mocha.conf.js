@@ -1,8 +1,5 @@
 'use strict';
 
-// Register the Babel require hook
-require('babel-core/register');
-
 var chai = require('chai');
 
 // Load Chai assertions

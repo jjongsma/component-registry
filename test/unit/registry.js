@@ -276,6 +276,25 @@ describe('ComponentRegistry', function() {
       });
     });
 
+    it('single instance', () => {
+      var builder = sinon.stub().returns('component');
+      sinon.stub(registry, 'provider').returns({
+        $get: builder,
+        single: true
+      });
+      return registry.component('one').then((component) => {
+        expect(registry.provider).to.have.callCount(1);
+        expect(builder).to.have.callCount(1);
+        expect(component).to.equal('component');
+        return registry.component('one').then((component) => {
+          expect(registry.provider).to.have.callCount(2);
+          expect(builder).to.have.callCount(1);
+          expect(component).to.equal('component');
+          registry.provider.restore();
+        });
+      });
+    });
+
     it('missing dependencies', function() {
 
       var builder = sinon.stub().returns('component');
