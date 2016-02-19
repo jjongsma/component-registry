@@ -161,6 +161,46 @@ describe('ComponentRegistry', function() {
 
   });
 
+  describe('dealias()', function() {
+
+    it('no aliases', () => {
+      expect(registry.dealias('test/component')).to.equal('test/component');
+    });
+
+    it('no match', () => {
+      registry.alias('foo', 'bar');
+      expect(registry.dealias('test/component')).to.equal('test/component');
+    });
+
+    it('exact match', () => {
+      registry.alias('test', 'replace');
+      expect(registry.dealias('test')).to.equal('replace');
+    });
+
+    it('prefix match', () => {
+      registry.alias('test', 'replace');
+      expect(registry.dealias('test/component')).to.equal('replace/component');
+    });
+
+    it('recursive match', () => {
+      registry.alias('test', 'replace');
+      registry.alias('replace', 'again');
+      expect(registry.dealias('test/component')).to.equal('again/component');
+    });
+
+    it('circular loop detected', () => {
+      registry.alias('test', 'replace');
+      registry.alias('replace', 'test');
+      expect(() => registry.dealias('test/component')).to.throw('Alias loop detected');
+    });
+
+    it('infinite loop detected', () => {
+      registry.alias('test', 'test/test');
+      expect(() => registry.dealias('test/component')).to.throw('Followed 10 aliases, possible infinite loop');
+    });
+
+  });
+
   describe('provider()', function() {
     
     var mockRegistration;
