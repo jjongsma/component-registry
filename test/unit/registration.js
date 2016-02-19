@@ -8,11 +8,13 @@ describe('ComponentRegistration', function() {
   var path = 'test';
 
   var registryStub;
+  var singletonBuilder = sinon.stub();
   var registration;
   var builder;
 
   beforeEach(function() {
     registryStub = sinon.createStubInstance(ComponentRegistry);
+    registryStub.singletonBuilder.returns(singletonBuilder);
     registration = new ComponentRegistration(registryStub, path);
     builder = sinon.stub().returns({});
   });
@@ -96,7 +98,7 @@ describe('ComponentRegistration', function() {
       expect(spec.length).to.equal(1);
       var provider = spec[0]();
       expect(provider.$get[0]).to.equal(builder);
-      assert(provider.single);
+      expect(provider.$builder).to.equal(singletonBuilder);
     });
 
     it('builder with dependencies', function() {
@@ -107,7 +109,7 @@ describe('ComponentRegistration', function() {
       expect(spec.length).to.equal(1);
       var provider = spec[0]();
       expect(provider.$get).to.deep.equal(['one', 'two', builder]);
-      assert(provider.single);
+      expect(provider.$builder).to.equal(singletonBuilder);
     });
 
     it('missing builder', function() {

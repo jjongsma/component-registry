@@ -280,7 +280,7 @@ describe('ComponentRegistry', function() {
       var builder = sinon.stub().returns('component');
       sinon.stub(registry, 'provider').returns({
         $get: builder,
-        single: true
+        $builder: registry.singletonBuilder()
       });
       return registry.component('one').then((component) => {
         expect(registry.provider).to.have.callCount(1);
