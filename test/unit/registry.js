@@ -225,6 +225,19 @@ describe('ComponentRegistry', function() {
       registry.load.restore();
     });
 
+    it('inheritance', () => {
+      var provider = { $get: 'inherited' };
+      var parent = new ComponentRegistry(__dirname = '/parent', config);
+      registry.options.parent = parent;
+      sinon.stub(registry, 'load').throws(new Error());
+      sinon.stub(parent, 'provider').returns(provider);
+      var inst = registry.provider('component');
+      expect(registry.load).to.have.callCount(1);
+      expect(parent.provider).to.have.callCount(1);
+      expect(inst).to.equal(provider);
+      registry.load.restore();
+    });
+
   });
 
   describe('register()', function() {
