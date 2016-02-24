@@ -1,7 +1,7 @@
 'use strict';
 
-export default function(container, config) {
+module.exports = function(container, config) {
   container.factory(() => {
     return { name: 'factory-one' };
   });
-}
+};

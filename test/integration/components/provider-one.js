@@ -1,6 +1,6 @@
 'use strict';
 
-export default function(container, config) {
+module.exports = function(container, config) {
   container.provider([
     () => {
       return {
@@ -13,4 +13,4 @@ export default function(container, config) {
       };
     }
   ]);
-}
+};

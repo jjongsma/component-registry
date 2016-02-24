@@ -1,6 +1,7 @@
 'use strict';
 
 var mockery = require('mockery');
+var m = require('module');
 
 var ComponentRegistry = require('../../lib/registry');
 var ComponentRegistration = require('../../lib/registration');
@@ -132,27 +133,57 @@ describe('ComponentRegistry', function() {
     });
 
     it('load external', () => {
+
       mockery.enable();
+
+      // Stub out for require.resolve()
+      var resolve = sinon.stub(m, '_resolveFilename');
+      resolve.throws(new Error());
+      resolve.withArgs('external').returns(__dirname + '/external/index.js');
+
       var module = registry.load('external');
       mockery.disable();
       expect(module).to.be.a('function');
       expect(module()).to.equal('external');
+
+      resolve.restore();
+
     });
 
     it('load external + property', () => {
+
       mockery.enable();
+
+      // Stub out for require.resolve()
+      var resolve = sinon.stub(m, '_resolveFilename');
+      resolve.throws(new Error());
+      resolve.withArgs('external').returns(__dirname + '/external/index.js');
+
       var module = registry.load('external:prop');
       mockery.disable();
       expect(module).to.be.a('function');
       expect(module()).to.equal('external.prop');
+
+      resolve.restore();
+
     });
 
     it('load external submodule + property', () => {
+
       mockery.enable();
+
+      // Stub out for require.resolve()
+      var resolve = sinon.stub(m, '_resolveFilename');
+      resolve.throws(new Error());
+      resolve.withArgs('external/sub').returns(__dirname + '/external/sub.js');
+
       var module = registry.load('external/sub:prop');
       mockery.disable();
       expect(module).to.be.a('function');
       expect(module()).to.equal('external/sub.prop');
+
+      resolve.restore();
+
     });
 
     it('load missing', () => {

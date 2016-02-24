@@ -1,6 +1,6 @@
 'use strict';
 
-export default function(container, config) {
+module.exports = function(container, config) {
   container.provider([
     // Dependencies
     'provider-one',
@@ -18,4 +18,4 @@ export default function(container, config) {
       };
     }
   ]);
-}
+};

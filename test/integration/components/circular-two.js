@@ -1,6 +1,6 @@
 'use strict';
 
-export default function(container, config) {
+module.exports = function(container, config) {
   container.component([
     // Dependencies
     'circular-one',
@@ -12,4 +12,4 @@ export default function(container, config) {
       };
     }
   ]);
-}
+};

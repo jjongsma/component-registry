@@ -1,6 +1,6 @@
 'use strict';
 
-export default function(container, config) {
+module.exports = function(container, config) {
   container.factory([
     // Dependencies
     'component-three',
@@ -14,4 +14,4 @@ export default function(container, config) {
       };
     }
   ]);
-}
+};
