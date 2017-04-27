@@ -233,7 +233,7 @@ describe('ComponentRegistry', function() {
   });
 
   describe('provider()', function() {
-    
+
     var mockRegistration;
 
     var module = function(registration, config) {
@@ -313,7 +313,7 @@ describe('ComponentRegistry', function() {
     });
 
     describe('valid dependencies', function() {
-      
+
       var builder;
 
       beforeEach(() => {
@@ -415,7 +415,7 @@ describe('ComponentRegistry', function() {
     });
 
     describe('valid dependencies', function() {
-      
+
       var one;
       var two;
       var result;
@@ -449,7 +449,7 @@ describe('ComponentRegistry', function() {
 
       it('component built', () => {
         result.then((component) => {
-          expect(compoment).to.equal('one');
+          expect(component).to.equal('one');
         });
       });
 
