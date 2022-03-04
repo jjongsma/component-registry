@@ -115,7 +115,7 @@ injection at this stage.
 The return value of a provider builder must contain a `$get` property
 that returns the actual component factory (see factory()).
 
-Example provider with dependencies:
+Example provider with a dependency on another provider object:
 
 ```
 provider(['hosts', function(hostsProvider) {
