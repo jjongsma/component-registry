@@ -113,7 +113,8 @@ are being constructed - components are not available for dependency
 injection at this stage.
 
 The return value of a provider builder must contain a `$get` property
-that returns the actual component factory (see factory()).
+that returns the actual component factory (see factory()), but other
+object properties may be defined for use by dependent providers.
 
 Example provider with a dependency on another provider object:
 
