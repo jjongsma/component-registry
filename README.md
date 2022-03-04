@@ -33,13 +33,13 @@ module.exports = function(container, config) {
   // provider, factory)
   container.component([
 
-    // Dependencies on other registered components for dynamic injection
+    // Dependencies on other local components for runtime instantiation
     'util/log',
 
     // Multiple dependencies here will be passed to the constructor below in listed order
 
     // Component constructor which receives instantiated dependencies as parameters
-    // (config is always last)
+    // (config is always last), and returns a fully configured component instance
     (logger) => new MyApplication(logger, config)
 
   ]);
@@ -47,6 +47,7 @@ module.exports = function(container, config) {
 };
 
 // Export component class to simplify unit testing
+// (You may also choose to define your module registration and underlying code in different files)
 module.exports.MyApplication = MyApplication;
 ```
 
@@ -55,7 +56,9 @@ any dependencies!
 
 ```
 registry.require('my-app').then(app => {
-    console.log("Running!")
+    app.start().then(() => {
+        console.log("Running!");
+    });
 });
 ```
 
