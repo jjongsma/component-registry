@@ -118,13 +118,11 @@ that returns the actual component factory (see factory()).
 Example provider with a dependency on another provider object:
 
 ```
-provider(['hosts', function(hostsProvider) {
+provider(['hosts', (hostsProvider) => {
   return {
-    $get: ['http', function($http) {
-      return function(path) {
-        return $http.get(hostsProvider.server + path);
-      };
-    }]
+    $get: ['http', ($http) => function(path) {
+      return $http.get(hostsProvider.server + path);
+    }];
   };
 }]);
 ```
