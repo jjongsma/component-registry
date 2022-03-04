@@ -45,6 +45,9 @@ module.exports = function(container, config) {
   ]);
 
 };
+
+// Export component class to simplify unit testing
+module.exports.MyApplication = MyApplication
 ```
 
 In your app initialization script, instantiate your core app component and let component-registry inject
