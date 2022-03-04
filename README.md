@@ -21,9 +21,13 @@ Create a component in a subdirectory of the current directory (i.e. `my-app/inde
 ```
 'use strict';
 
-/*
-    ... module code here ...
-*/
+class MyApplication {
+
+    /*
+        ... module code here ...
+    */
+
+}
 
 // Return a registration function that allows the registry to instantiate this component
 // when needed
