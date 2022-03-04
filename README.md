@@ -69,8 +69,8 @@ registry.require('my-app').then(app => {
 
 ### Registration Types
 
-The registration function implemented in each module (`fn(container, config)`) allows you flexibility
-in how your component is initialized, and can be one of the following four types.
+The registration function implemented in each of your modules (`fn(container, config)`) allows you
+flexibility in how your component is initialized, and can be one of the following four types.
 
 #### component([...dependencies, ]factory)
 
