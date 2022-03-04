@@ -72,7 +72,7 @@ registry.require('my-app').then(app => {
 The registration function implemented in each module (`fn(container, config)`) allows you flexibility
 in how your component is initialized, and can be one of the following four types.
 
-#### component()
+#### component([...dependencies, ]factory)
 
 Register a singleton component, the most common usage. Registering a component this way ensures
 all dependent modules will use the same component instance.
@@ -85,7 +85,7 @@ Example component with dependency:
 container.component([ 'http', $http => new RestClient($http) ]);
 ```
 
-#### factory()
+#### factory([...dependencies, ]factory)
 
 Register a component factory. Factories allow more control over
 component creation than the component() method, by allowing multiple
@@ -104,7 +104,7 @@ Example factory with dependency:
 container.factory([ 'http', $http => new RestClient($http) ]);
 ```
 
-#### provider()
+#### provider([...dependencies, ]factory)
 
 Register a factory provider. This provides additional control over
 factory configuration, since it has access to other providers during
@@ -128,7 +128,7 @@ provider(['hosts', (hostsProvider) => {
 }]);
 ```
 
-#### value()
+#### value(val)
 
 Register a static value as an injectable component. Since values
 are static, they cannot have any dependencies.
