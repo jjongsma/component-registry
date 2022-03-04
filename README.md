@@ -51,7 +51,8 @@ module.exports = function(container, config) {
 };
 
 // Export component class to simplify unit testing
-// (You may also choose to define your module registration and underlying code in different files)
+// (You may also choose to define your module registration and underlying code in
+// different files)
 module.exports.MyApplication = MyApplication;
 ```
 
