@@ -12,7 +12,7 @@ environment variables for module configuration:
 var ComponentRegistry = require('component-registry');
 var registry = new ComponentRegistry(__dirname, process.env);
 
-// Optional: set standard global aliases for specific modules in order to simplify future changes
+// Optional: set global aliases for modules to allow swapping dependency implementations
 registry.alias('util/log', 'ext/loggly');
 ```
 
@@ -25,10 +25,12 @@ Create a component in a subdirectory of the current directory (i.e. `my-app/inde
     ... module code here ...
 */
 
-// Return a registration function that allows the registry to instantiate this component when needed
+// Return a registration function that allows the registry to instantiate this component
+// when needed
 module.exports = function(container, config) {
 
-  // Tell the registry container what type of component we are registering (component, provider, factory)
+  // Tell the registry container what type of component we are registering (component,
+  // provider, factory)
   container.component([
 
     // Dependencies on other registered components for dynamic injection
@@ -36,7 +38,8 @@ module.exports = function(container, config) {
 
     // Multiple dependencies here will be passed to the constructor below in listed order
 
-    // Component constructor which receives instantiated dependencies as parameters (config is always last)
+    // Component constructor which receives instantiated dependencies as parameters
+    // (config is always last)
     (logger) => new MyApplication(logger, config)
 
   ]);
