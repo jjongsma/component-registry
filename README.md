@@ -19,9 +19,11 @@ registry.alias('util/log', 'ext/loggly');
 The first parameter to ComponentRegistry can be a single path, an array of paths, or omitted
 entirely. These paths provide a search base for finding locally defined modules. If no modules
 are found at the specified path, the registry will attempt to load it as a standard node module
-installed from npm (global `require()` behavior).
+installed from npm (global `require()` behavior). If you are using both local and npm components
+in your registry, you may want to group your local modules under a common directory to eliminate
+namespace conflicts (i.e. `local/`).
 
-Create a component in a subdirectory of the current directory (i.e. `my-app/index.js`):
+Next, create a component in a subdirectory of the current directory (i.e. `my-app/index.js`):
 
 ```
 'use strict';
@@ -61,8 +63,8 @@ module.exports = function(container, config) {
 module.exports.MyApplication = MyApplication;
 ```
 
-In your app initialization script, instantiate your core app component and let component-registry inject
-any dependencies!
+Then in your app initialization script, instantiate your core app component and let component-registry
+inject any dependencies!
 
 ```
 registry.require('my-app').then(app => {
