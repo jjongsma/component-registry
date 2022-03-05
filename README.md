@@ -16,6 +16,11 @@ var registry = new ComponentRegistry(__dirname, process.env);
 registry.alias('util/log', 'ext/loggly');
 ```
 
+The first parameter to ComponentRegistry can be a single path, an array of paths, or omitted
+entirely. These paths provide a search base for finding locally defined modules. If no modules
+are found at the specified path, the registry will attempt to load it as a standard node module
+installed from npm (global `require()` behavior).
+
 Create a component in a subdirectory of the current directory (i.e. `my-app/index.js`):
 
 ```
