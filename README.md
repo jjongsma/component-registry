@@ -168,9 +168,9 @@ registration.provider(() => {
 
   return {
 
-  	setApiServer: (server) => {
-	  apiServer = server;
-	},
+    setApiServer: (server) => {
+      apiServer = server;
+    },
 
     $get: ['http', (http) => function(path) {
       return http.get(apiServer + path);
@@ -203,20 +203,20 @@ module.exports = function(registration, config) {
 
   // Specify dependency on the rest-client provider
   registration.provider('rest-client', (restClientProvider) => {
-  	
-	restClientProvider.setApiServer(config.API_SERVER);
+  
+    restClientProvider.setApiServer(config.API_SERVER);
 
-	return {
+    return {
 
-		// This is the same factory we used in the above example
-		'$get': [
-          'util/log',
-          (logger) => new MyApplication(logger, config)
-        ],
+      // This is the same factory we used in the above example
+      $get': [
+        'util/log',
+        (logger) => new MyApplication(logger, config)
+      ],
 
-		// Use predefined singleton builder to ensure we only create a single shared
-		// component
-        $builder: registration.registry.singletonBuilder()
+      // Use predefined singleton builder to ensure we only create a single shared
+      // component
+      $builder: registration.registry.singletonBuilder()
 
 	};
 
