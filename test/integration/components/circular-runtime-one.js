@@ -1,10 +1,10 @@
 'use strict';
 
-module.exports = function(container, config) {
-  container.component([
+module.exports = function(registration, config) {
+  registration.component([
     () => {
       // Request a runtime component during building
-      return container.require('circular-runtime-two').then(function(two) {
+      return registration.require('circular-runtime-two').then(function(two) {
         return {
           name: 'circular-runtime-one',
           two: two

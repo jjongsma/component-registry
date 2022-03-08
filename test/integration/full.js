@@ -4,7 +4,7 @@ var _ = require('lodash');
 
 var ComponentRegistry = require('../../lib/registry.js');
 
-describe('Component container integration', () => {
+describe('Component registry integration', () => {
 
   var registry;
 

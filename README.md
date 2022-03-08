@@ -36,28 +36,28 @@ class MyApplication {
 
 }
 
-// Return a registration function that allows the registry to instantiate this component
-// when needed
-module.exports = function(container, config) {
+// Return a registration function that the registry will call the first time this component
+// is requested
+module.exports = function(registration, config) {
 
-  // Tell the registry container what type of component we are registering (component,
-  // provider, factory)
-  container.component([
+  // Tell the registry what type of component we are configuring (component, provider,
+  // factory, value)
+  registration.component([
 
-    // Dependencies on other local components for runtime instantiation
+    // Dependencies on other local components for runtime injection
     'util/log',
 
     // Multiple dependencies here will be passed to the constructor below in listed order
 
-    // Component constructor which receives instantiated dependencies as parameters
-    // (config is always last), and returns a fully configured component instance
+    // Component constructor which receives initialized dependency instances as parameters
+    // and returns a fully configured component instance
     (logger) => new MyApplication(logger, config)
 
   ]);
 
 };
 
-// Export component class to simplify unit testing
+// Export underlying component class to simplify unit testing
 // (You may also choose to define your module registration and underlying code in
 // different files)
 module.exports.MyApplication = MyApplication;
@@ -67,17 +67,20 @@ Then in your app initialization script, instantiate your core app component and 
 inject any dependencies!
 
 ```
-registry.require('my-app').then(app => {
-    app.start().then(() => {
-        console.log("Running!");
-    });
-});
+let app = await registry.require('my-app');
+
+await app.start();
+
+console.log('Running!');
 ```
 
 ### Registration Types
 
-The registration function implemented in each of your modules (`fn(container, config)`) allows you
+The registration function implemented in each of your modules (`fn(registration, config)`) allows you
 flexibility in how your component is initialized, and can use one of the following four types.
+
+As an alternative to returning a fully initalized instance, you may return a `Promise` which
+resolves to the instance and the registry will await initialization before proceeding.
 
 #### component([...dependencies, ]factory)
 
@@ -89,7 +92,16 @@ Example component with dependency:
 ```
 // Creates a singleton upon the first dependency request and uses it in every
 // dependent module
-container.component([ 'http', $http => new RestClient($http) ]);
+registration.component([ 'http', http => new RestClient(http) ]);
+
+// Example using a Promise
+registration.component([
+  'db/postgres',
+  async (db) => {
+    let branding = await db.loadBranding();
+    return new MyApplication(branding);
+  }
+]);
 ```
 
 #### factory([...dependencies, ]factory)
@@ -108,7 +120,7 @@ Example factory with dependency:
 ```
 // The implementation below would return a new RestClient instance for each
 // dependent module
-container.factory([ 'http', $http => new RestClient($http) ]);
+registration.factory([ 'http', http => new RestClient(http) ]);
 ```
 
 #### provider([...dependencies, ]factory)
@@ -128,8 +140,8 @@ Example provider with a dependency on another provider object:
 ```
 provider(['hosts', (hostsProvider) => {
   return {
-    $get: ['http', ($http) => function(path) {
-      return $http.get(hostsProvider.server + path);
+    $get: ['http', (http) => function(path) {
+      return http.get(hostsProvider.server + path);
     }];
   };
 }]);
@@ -143,8 +155,12 @@ are static, they cannot have any dependencies.
 Example:
 
 ```
-container.value({ field: 'value' });
+registration.value({ field: 'value' });
 ```
+
+### Debugging Initialization Issues
+
+Set REGISTRY_DEBUG=1 to see a detailed log of component initialization events.
 
 ### Additional Documentation
 

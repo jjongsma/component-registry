@@ -1,7 +1,7 @@
 'use strict';
 
-module.exports = function(container, config) {
-  container.factory(() => {
+module.exports = function(registration, config) {
+  registration.factory(() => {
     return { name: 'factory-one' };
   });
 };

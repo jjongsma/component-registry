@@ -1,7 +1,7 @@
 'use strict';
 
-module.exports = function(container, config) {
-  container.provider([
+module.exports = function(registration, config) {
+  registration.provider([
     () => {
       return {
         url: 'url',

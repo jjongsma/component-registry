@@ -1,7 +1,7 @@
 'use strict';
 
-module.exports = function(container, config) {
-  container.component([
+module.exports = function(registration, config) {
+  registration.component([
     // Dependencies
     'component-one',
     'component-two',

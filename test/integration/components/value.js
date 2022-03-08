@@ -1,6 +1,6 @@
 'use strict';
 
 // Static value component
-module.exports = function(container, config) {
-  container.value('value');
+module.exports = function(registration, config) {
+  registration.value('value');
 };
