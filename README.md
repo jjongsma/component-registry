@@ -218,7 +218,7 @@ module.exports = function(registration, config) {
       // component
       $builder: registration.registry.singletonBuilder()
 
-	};
+    };
 
   });
 
