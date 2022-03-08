@@ -1,7 +1,7 @@
 ## Component Registry
 
-A component registry for Node server applications, with dependency resolution,
-injection and lazy component initialization.
+A component registry for Node server applications with environment-specific configuration,
+dependency resolution and injection, and lazy component initialization.
 
 ### Quick Start
 
