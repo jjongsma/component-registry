@@ -63,8 +63,9 @@ module.exports = function(registration, config) {
 module.exports.MyApplication = MyApplication;
 ```
 
-Then in your app initialization script, instantiate your core app component and let component-registry
-inject any dependencies!
+Then in your app initialization script, instantiate your core app component and let
+component-registry inject any dependencies! Note that `require()` is async to accommodate
+any complex initialization processes.
 
 ```
 let app = await registry.require('my-app');
