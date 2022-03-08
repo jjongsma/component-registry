@@ -159,9 +159,23 @@ Example:
 registration.value({ field: 'value' });
 ```
 
+### Building / Testing
+
+This package can be used as-is without a specific build process. However, if you
+want to deploy a minimal package with your app (no tests, etc) you can run:
+
+`gulp build`
+
+...and use the contents of the `dist/` folder.
+
+Unit and integration tests can be run with:
+
+`gulp test`
+
 ### Debugging Initialization Issues
 
-Set REGISTRY_DEBUG=1 to see a detailed log of component initialization events.
+Set REGISTRY_DEBUG=1 to see a detailed log of component initialization events (try
+`REGISTRY_DEBUG=1 gulp test`)
 
 ### Additional Documentation
 
