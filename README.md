@@ -75,6 +75,23 @@ await app.start();
 console.log('Running!');
 ```
 
+### Provider/Factory/Component Model
+
+Internally, `component-registry` uses a Provider/Factory/Component model that will feel
+familiar if you've been exposed to DI frameworks like AngularJS or OSGI.
+
+Component: a fully-configured, ready to use instance of an type.
+
+Factory: a function that is responsible for configuring and instantiating `Components`.
+
+Provider: an object that allows config-time initialization of its `Factory` before
+any `Components` have been created.
+
+In simplest terms:
+* A `Component` is a shortcut for a `Factory` that will only create a single shared instance
+* A `Factory` is a shortcut for a `Provider` that does not require config-time initialization
+* A `Provider` gives the most flexibility over this entire process
+
 ### Registration Types
 
 The registration function implemented in each of your modules (`fn(registration, config)`) allows you
@@ -127,25 +144,86 @@ registration.factory([ 'http', http => new RestClient(http) ]);
 #### provider([...dependencies, ]factory)
 
 Register a factory provider. This provides additional control over
-factory configuration, since it has access to other providers during
-instantiation. Providers can only depend on other providers as they
-are being constructed - components are not available for dependency
-injection at this stage.
+factory configuration, since it is created before any components are
+instantiated and has access to other `Providers` during creation.
+`Providers` can only depend on other `Providers` as they are being
+constructed - `Components` are not available for dependency injection
+at this stage.
 
-The return value of a provider builder must contain a `$get` property
-that returns the actual component factory (see factory()), but other
-object properties may be defined for use by dependent providers.
+The return value of a provider registration function must contain a
+`$get` property that returns the component factory (see factory()), but
+other object properties may be defined for use by dependent providers.
 
-Example provider with a dependency on another provider object:
+Practically speaking, it's generally only useful to explicitly define
+providers when they are shared between applications and require factory
+configuration that doesn't rely on this registry's `config` object.
+
+Example provider which exposes a configuration function during the
+config phase:
 
 ```
-registration.provider(['hosts', (hostsProvider) => {
+registration.provider(() => {
+
+  let apiServer = 'https://api.example.com/v1';
+
   return {
+
+  	setApiServer: (server) => {
+	  apiServer = server;
+	},
+
     $get: ['http', (http) => function(path) {
-      return http.get(hostsProvider.server + path);
+      return http.get(apiServer + path);
     }];
+
   };
+
 }]);
+```
+
+Now we can bootstrap the provider configuration before initializing the app:
+
+```
+let restClient = await registry.provider('rest-client');
+restClient.setApiServer(config.API_SERVER);
+
+let app = await registry.require('my-app');
+await app.start();
+
+```
+
+This can also be accomplished from another `Provider` which is responsible for
+configuration. Let's use a `Provider` for `MyApplication` instead of a `Component`
+to encapsulate the setup in one place:
+
+```
+// MyApplication module using a provider
+
+module.exports = function(registration, config) {
+
+  // Specify dependency on the rest-client provider
+  registration.provider('rest-client', (restClientProvider) => {
+  	
+	restClientProvider.setApiServer(config.API_SERVER);
+
+	return {
+
+		// This is the same factory we used in the above example
+		'$get': [
+          'util/log',
+          (logger) => new MyApplication(logger, config)
+        ],
+
+		// Use predefined singleton builder to ensure we only create a single shared
+		// component
+        $builder: registration.registry.singletonBuilder()
+
+	};
+
+  });
+
+};
+
 ```
 
 #### value(val)
