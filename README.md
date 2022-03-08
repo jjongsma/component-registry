@@ -139,7 +139,7 @@ object properties may be defined for use by dependent providers.
 Example provider with a dependency on another provider object:
 
 ```
-provider(['hosts', (hostsProvider) => {
+registration.provider(['hosts', (hostsProvider) => {
   return {
     $get: ['http', (http) => function(path) {
       return http.get(hostsProvider.server + path);
