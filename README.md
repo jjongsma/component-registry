@@ -101,8 +101,9 @@ sugar to simplify implementations.
 The registration function implemented in each of your modules (`fn(registration, config)`) allows you
 flexibility in how your component is initialized, and can use one of the following four types.
 
-As an alternative to returning a fully initalized instance, you may return a `Promise` which
-resolves to the instance and the registry will await initialization before proceeding.
+As an alternative to returning a fully initalized instance, you may return a `Promise` from
+your factory function which resolves to the instance and the registry will await initialization
+before proceeding.
 
 #### component([...dependencies, ]factory)
 
@@ -162,6 +163,8 @@ Practically speaking, it's generally only useful to explicitly define
 providers when they are shared between applications and require factory
 configuration that doesn't rely on this registry's `config` object.
 
+Unlike other types, a `Provider` cannot return a Promise.
+
 Example provider which exposes a configuration function during the
 config phase:
 
@@ -188,7 +191,7 @@ registration.provider(() => {
 Now we can bootstrap the provider configuration before initializing the app:
 
 ```
-let restClient = await registry.provider('rest-client');
+let restClient = registry.provider('rest-client');
 restClient.setApiServer(config.API_SERVER);
 
 let app = await registry.require('my-app');
