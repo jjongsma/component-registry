@@ -92,6 +92,10 @@ In simplest terms:
 * A `Factory` is a shortcut for a `Provider` that does not require config-time initialization
 * A `Provider` gives the most flexibility over this entire process
 
+When you register a module of any type, a `Provider` is created internally which has different
+pre-defined behavior depending on the type - the other helper methods are just syntactic
+sugar to simplify implementations.
+
 ### Registration Types
 
 The registration function implemented in each of your modules (`fn(registration, config)`) allows you
