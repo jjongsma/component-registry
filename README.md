@@ -8,7 +8,7 @@ dependency resolution and injection, and lazy component initialization.
 Configure a new registry in your app using the current directory as the module root path, and
 environment variables for module configuration:
 
-```
+```js
 var ComponentRegistry = require('component-registry');
 var registry = new ComponentRegistry(__dirname, process.env);
 
@@ -25,7 +25,7 @@ namespace conflicts (i.e. `local/`).
 
 Next, create a component in a subdirectory of the current directory (i.e. `my-app/index.js`):
 
-```
+```js
 'use strict';
 
 class MyApplication {
@@ -67,7 +67,7 @@ Then in your app initialization script, instantiate your core app component and 
 component-registry inject any dependencies! Note that `require()` is async to accommodate
 any complex initialization processes.
 
-```
+```js
 let app = await registry.require('my-app');
 
 await app.start();
@@ -112,7 +112,7 @@ all dependent modules will use the same component instance.
 
 Example component with dependency:
 
-```
+```js
 // Creates a singleton upon the first dependency request and uses it in every
 // dependent module
 registration.component([ 'http', http => new RestClient(http) ]);
@@ -140,7 +140,7 @@ Any custom component scoping or sharing must be managed by the factory.
 
 Example factory with dependency:
 
-```
+```js
 // The implementation below would return a new RestClient instance for each
 // dependent module
 registration.factory([ 'http', http => new RestClient(http) ]);
@@ -163,12 +163,12 @@ Practically speaking, it's generally only useful to explicitly define
 providers when they are shared between applications and require factory
 configuration that doesn't rely on this registry's `config` object.
 
-Unlike other types, a `Provider` cannot return a Promise.
+Note: unlike other types, a `Provider` cannot return a Promise.
 
 Example provider which exposes a configuration function during the
 config phase:
 
-```
+```js
 registration.provider(() => {
 
   let apiServer = 'https://api.example.com/v1';
@@ -190,7 +190,7 @@ registration.provider(() => {
 
 Now we can bootstrap the provider configuration before initializing the app:
 
-```
+```js
 let restClient = registry.provider('rest-client');
 restClient.setApiServer(config.API_SERVER);
 
@@ -203,7 +203,7 @@ This can also be accomplished from another `Provider` which is responsible for
 configuration. Let's use a `Provider` for `MyApplication` instead of a `Component`
 to encapsulate the setup in one place:
 
-```
+```js
 // MyApplication module using a provider
 
 module.exports = function(registration, config) {
@@ -239,7 +239,7 @@ are static, they cannot have any dependencies.
 
 Example:
 
-```
+```js
 registration.value({ field: 'value' });
 ```
 
