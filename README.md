@@ -208,15 +208,14 @@ module.exports = function(registration, config) {
 
     return {
 
-      // This is the same factory we used in the above example
+      // This is the same factory we used in the above example, except we
+	  // need to explicitly use the singleton() convenience wrapper
       $get': [
         'util/log',
-        (logger) => new MyApplication(logger, config)
-      ],
-
-      // Use predefined singleton builder to ensure we only create a single shared
-      // component
-      $builder: registration.registry.singletonBuilder()
+        registration.singleton(
+			(logger) => new MyApplication(logger, config)
+		)
+      ]
 
     };
 
