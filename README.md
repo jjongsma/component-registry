@@ -216,12 +216,12 @@ module.exports = function(registration, config) {
     return {
 
       // This is the same factory we used in the above example, except we
-	  // need to explicitly use the singleton() convenience wrapper
+      // need to explicitly use the singleton() convenience wrapper
       $get': [
         'util/log',
         registration.singleton(
-			(logger) => new MyApplication(logger, config)
-		)
+          (logger) => new MyApplication(logger, config)
+        )
       ]
 
     };
