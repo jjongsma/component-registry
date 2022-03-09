@@ -80,11 +80,11 @@ console.log('Running!');
 Internally, `component-registry` uses a Provider/Factory/Component model that will feel
 familiar if you've been exposed to DI frameworks like AngularJS or OSGI.
 
-Component: a fully-configured, ready to use instance of an type.
+`Component`: a fully-configured, ready to use instance of an type.
 
-Factory: a function that is responsible for configuring and instantiating `Components`.
+`Factory`: a function that is responsible for configuring and instantiating `Components`.
 
-Provider: an object that allows config-time initialization of its `Factory` before
+`Provider`: an object that allows config-time initialization of its `Factory` before
 any `Components` have been created.
 
 In simplest terms:
